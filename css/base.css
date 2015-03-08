@@ -1,0 +1,32 @@
+#itsa-icons-container {
+    display: none; !important;
+}
+
+.itsa-icon-element {
+    display: inline-block;
+    vertical-align: baseline;
+    padding: 0;
+    margin: 0;
+}
+
+.itsa-icon-element >svg {
+    height: 1em;
+    width: 1em;
+    vertical-align: middle;
+}
+
+button.itsa-icon {
+    padding: 0.5em;
+}
+
+button.itsa-iconleft {
+    padding-left: 0.75em;
+}
+
+button.itsa-iconright {
+    padding-right: 0.75em;
+}
+
+button.itsa-icon .itsa-icon-element >svg {
+    margin-top: -0.1em;
+}

@@ -1,0 +1,7 @@
+#itsa-alert-icon {
+  fill: #E3A900;
+    text-shadow: 1px 1px 1px rgba(50, 50, 50, 0.6);
+}
+icon-alert >svg {
+    text-shadow: 1px 1px 1px rgba(50, 50, 50, 0.6);
+}
