@@ -13,10 +13,10 @@
 */
 
 require('polyfill/polyfill-base.js');
+require('js-ext/lib/string.js');
 require('./css/base.css');
 
 var NAME = '[icons]: ',
-    DEFAULT_SIZE = 1024,
     createHashMap = require('js-ext/extra/hashmap.js').createMap;
 
 module.exports = function (window) {
@@ -41,9 +41,9 @@ module.exports = function (window) {
 
     upgradeIconElement = function(element) {
         // `element` is supposed to have the form: icon-`iconname`
-        var iconName = element.getTagName().substr(5).toLowerCase();
-        element.setHTML('<svg><use xlink:href="#itsa-'+iconName+'-icon"></use></svg>', true); // silently: no need to inform anyone about this system-upgrade
-        element.setClass('itsa-icon-element', null, null, true); // also silent
+        var iconName = element.getAttr('icon');
+        element.empty(true, true);
+        element.addSystemElement('<svg><use xlink:href="#itsa-'+iconName+'-icon"></use></svg>'); // silent by default
     };
 
     upgradeDOM = function() {
@@ -53,7 +53,7 @@ module.exports = function (window) {
                 i, vChild;
             for (i=0; i<len; i++) {
                 vChild = vChildren[i];
-                if (vChild.tag.substr(0, 5)==='ICON-') {
+                if ((vChild.tag==='I') && vChild.attrs && vChild.attrs.icon) {
                     upgradeIconElement(vChild.domNode);
                 }
                 else {
@@ -65,20 +65,30 @@ module.exports = function (window) {
     };
 
     Event.after(
-        'UI:nodeinsert',
+        ['UI:nodeinsert', 'UI:attributechange', 'UI:attributeinsert'],
         function(e) {
             upgradeIconElement(e.target);
         },
         function(e) {
-            return (e.target.vnode.tag.substr(0, 5)==='ICON-');
+            var vnode = e.target.vnode;
+            return (vnode.tag==='I') && vnode.attrs && vnode.attrs.icon;
         }
     );
 
-    DOCUMENT.defineIcon = function(iconName, svgContent, viewBoxWidth, viewBoxHeight) {
+    Event.after(
+        'UI:attributeremove',
+        function(e) {
+            var node = e.target;
+            node.empty(true, true);
+        },
+        function(e) {
+            return (e.target.vnode.tag==='I') && e.changed.contains('icon');
+        }
+    );
+
+    DOCUMENT.defineIcon = function(iconName, viewBoxWidth, viewBoxHeight, svgContent) {
         var viewBoxDimension = '0 0 ',
             iconId, currentDefinition;
-        viewBoxWidth || (viewBoxWidth = DEFAULT_SIZE);
-        viewBoxHeight || (viewBoxHeight = DEFAULT_SIZE);
         viewBoxDimension = '0 0 '+viewBoxWidth+' '+viewBoxHeight;
         iconId = 'itsa-'+iconName.toLowerCase()+'-icon';
         currentDefinition = iconContainer.getElement('#'+iconId);

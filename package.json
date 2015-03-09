@@ -24,6 +24,7 @@
     "directories": {
         "css": "./css",
         "base-icons": "./base-icons",
+        "extra-animated-icons": "./extra-animated-icons",
         "extra-icons": "./extra-icons"
     },
     "browserify": {
