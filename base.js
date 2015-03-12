@@ -7,8 +7,8 @@
  * New BSD License - http://choosealicense.com/licenses/bsd-3-clause/
  *
  *
- * @module panel
- * @class Panel
+ * @module icons
+ * @class Icons
  * @since 0.0.1
 */
 
@@ -39,6 +39,14 @@ module.exports = function (window) {
     // will be inserted as a system-node:
     iconContainer = DOCUMENT.body.getElement('>#itsa-icons-container', true) || DOCUMENT.body.addSystemElement('<svg id="itsa-icons-container"></svg>');
 
+    /**
+     * Upgrades the specified i-element into a svg-icon.
+     *
+     * @method upgradeIconElement
+     * @param element {HTMLElement}
+     * @protected
+     * @since 0.0.1
+     */
     upgradeIconElement = function(element) {
         // `element` is supposed to have the form: icon-`iconname`
         var iconName = element.getAttr('icon');
@@ -46,6 +54,14 @@ module.exports = function (window) {
         element.addSystemElement('<svg><use xlink:href="#itsa-'+iconName+'-icon"></use></svg>'); // silent by default
     };
 
+    /**
+     * Upgrades all i-elements that have an `icon`-attribute set.
+     * Will render them into svg-icons.
+     *
+     * @method upgradeDOM
+     * @protected
+     * @since 0.0.1
+     */
     upgradeDOM = function() {
         var upgrade = function(vnode) {
             var vChildren = vnode.vChildren,
@@ -86,6 +102,19 @@ module.exports = function (window) {
         }
     );
 
+    /**
+     * Defines a new svg-icon. With this icon-definition, icons can be used by usinf i-elements
+     * with the attribute: icon="iconname".
+     *
+     * @method defineIcon
+     * @for document
+     * @param iconName {String} unique iconname, which will be used with the attribute: icon="iconname"
+     * @param viewBoxWidth {Number} pixels of the svg's viewBoxWidth
+     * @param viewBoxHeight {Number} pixels of the svg's viewBoxHeight
+     * @param svgContent {String} svg;s innercontent
+     * @chainable
+     * @since 0.0.1
+     */
     DOCUMENT.defineIcon = function(iconName, viewBoxWidth, viewBoxHeight, svgContent) {
         var viewBoxDimension = '0 0 ',
             iconId, currentDefinition;
@@ -98,6 +127,7 @@ module.exports = function (window) {
         else {
             iconContainer.append('<symbol id="'+iconId+'" viewBox="'+viewBoxDimension+'">'+svgContent+'</symbol>');
         }
+        return this;
     };
 
     upgradeDOM();
