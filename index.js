@@ -21,6 +21,8 @@ module.exports = function (window) {
     require('./base-icons/minus.js')(window);
     require('./base-icons/plus.js')(window);
     require('./base-icons/question.js')(window);
+    require('./base-icons/printer.js')(window);
+    require('./base-icons/cart.js')(window);
     require('./extra-animated-icons/audio-anim.js')(window);
     require('./extra-animated-icons/speaking-anim.js')(window);
     require('./extra-animated-icons/grid-anim.js')(window);
